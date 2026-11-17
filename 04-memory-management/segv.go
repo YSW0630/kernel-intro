@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	// nilはかならずアクセスに失敗してページフォールトが発生する特殊なメモリアクセス
+	// Accessing nil always fails and causes a page fault.
 	var p *int = nil
-	fmt.Println("不正メモリアクセス前")
+	fmt.Println("Before invalid memory access")
 	*p = 0
-	fmt.Println("不正メモリアクセス後")
+	fmt.Println("After invalid memory access")
 }

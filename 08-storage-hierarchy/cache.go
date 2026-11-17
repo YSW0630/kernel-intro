@@ -2,12 +2,11 @@
 
 cache
 
-1. 2^2(4)Kバイトから2^2.25(4.76)Kバイト,2^2.5(5.7)Kバイト、...と、最終的には64Mバイトの数値に対して以下の処理をする
-  1. 数値に相当するサイズのバッファを獲得
-  2. バッファの全キャッシュラインにシーケンシャルにアクセス。最後のキャッシュラインへのアクセスが終わったら
-     最初のキャッシュラインに戻り、最終的にはソースコードに書かれているNACCESS回メモリアクセスする
-  3. 1回のアクセスあたりの所要時間を記録
-2. 1の結果をもとにcache.jpgというファイルにグラフを出力
+1. For values from 2^2 (4) KiB through 2^2.25 (4.76) KiB, 2^2.5 (5.7) KiB, and so on up to 64 MiB, perform the following:
+  1. Allocate a buffer of the corresponding size.
+  2. Access every cache line in the buffer sequentially. After reaching the last cache line, return to the first; perform NACCESS memory accesses in total, as specified in the source code.
+  3. Record the time required per access.
+2. Based on the results from step 1, output a graph to cache.jpg.
 
 */
 
@@ -25,9 +24,9 @@ import (
 
 const (
 	CACHE_LINE_SIZE = 64
-	// プログラムがうまく動作しなければこの値を変更してください。高速なマシンではアクセス数が足りずに、
-	// とくにバッファサイズが小さいときの値がおかしいことがあります。低速なマシンでは時間がかかりすぎる
-	// ことがあるので値を小さくしてください
+	// Adjust this value if the program does not work well. On fast machines, too few
+	// accesses can produce incorrect values, especially for small buffers. On slow
+	// machines, reduce it if the program takes too long.
 	NACCESS = 128 * 1024 * 1024
 )
 
@@ -35,7 +34,7 @@ func main() {
 	_ = os.Remove("out.txt")
 	f, err := os.OpenFile("out.txt", os.O_CREATE|os.O_RDWR, 0660)
 	if err != nil {
-		log.Fatal("openfile()に失敗しました")
+		log.Fatal("openfile() failed")
 	}
 	defer f.Close()
 	for i := 2.0; i <= 16.0; i += 0.25 {
@@ -43,10 +42,10 @@ func main() {
 		data, err := syscall.Mmap(-1, 0, bufSize, syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_ANON|syscall.MAP_PRIVATE)
 		defer syscall.Munmap(data)
 		if err != nil {
-			log.Fatal("mmap()に失敗しました")
+			log.Fatal("mmap() failed")
 		}
 
-		fmt.Printf("バッファサイズ 2^%.2f(%d) KiB についてのデータを収集中...\n", i, bufSize/1024)
+		fmt.Printf("Collecting data for buffer size 2^%.2f (%d) KiB...\n", i, bufSize/1024)
 		start := time.Now()
 		for i := 0; i < NACCESS/(bufSize/CACHE_LINE_SIZE); i++ {
 			for j := 0; j < bufSize; j += CACHE_LINE_SIZE {
@@ -59,7 +58,7 @@ func main() {
 	command := exec.Command("./plot-cache.py")
 	out, err := command.Output()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "コマンド実行に失敗しました: %q: %q", err, string(out))
+		fmt.Fprintf(os.Stderr, "Command execution failed: %q: %q", err, string(out))
 		os.Exit(1)
 	}
 }

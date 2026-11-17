@@ -15,30 +15,30 @@ const (
 
 func main() {
 	pid := os.Getpid()
-	fmt.Println("*** 新規メモリ領域獲得前のメモリマップ ***")
+	fmt.Println("*** Memory map before allocating a new memory region ***")
 	command := exec.Command("cat", "/proc/"+strconv.Itoa(pid)+"/maps")
 	command.Stdout = os.Stdout
 	err := command.Run()
 	if err != nil {
-		log.Fatal("catの実行に失敗しました")
+		log.Fatal("failed to execute cat")
 	}
 
-	// mmap()システムコールの呼び出しによって1GBのメモリ領域を獲得
+	// Allocate a 1 GB memory region by calling the mmap() system call.
 	data, err := syscall.Mmap(-1, 0, ALLOC_SIZE, syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_ANON|syscall.MAP_PRIVATE)
 	if err != nil {
-		log.Fatal("mmap()に失敗しました")
+		log.Fatal("mmap() failed")
 	}
 
 	fmt.Println("")
-	fmt.Printf("*** 新規メモリ領域: アドレス = %p, サイズ = 0x%x ***\n",
+	fmt.Printf("*** New memory region: address = %p, size = 0x%x ***\n",
 		&data[0], ALLOC_SIZE)
 	fmt.Println("")
 
-	fmt.Println("*** 新規メモリ領域獲得後のメモリマップ ***")
+	fmt.Println("*** Memory map after allocating a new memory region ***")
 	command = exec.Command("cat", "/proc/"+strconv.Itoa(pid)+"/maps")
 	command.Stdout = os.Stdout
 	err = command.Run()
 	if err != nil {
-		log.Fatal("catの実行に失敗しました")
+		log.Fatal("failed to execute cat")
 	}
 }

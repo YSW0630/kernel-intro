@@ -1,9 +1,9 @@
 #!/bin/bash
 
-while : ; do
-  if [ ! -e lock ] ; then
-    break
-  fi
+while :; do
+	if [ ! -e lock ]; then
+		break
+	fi
 done
 touch lock
 TMP=$(cat count)

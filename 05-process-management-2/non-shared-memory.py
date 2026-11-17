@@ -5,16 +5,16 @@ import sys
 
 data = 1000
 
-print("子プロセス生成前のデータの値: {}".format(data))
+print("Data value before creating the child process: {}".format(data))
 try:
-	pid = os.fork()
+    pid = os.fork()
 except OSError:
-	print("fork()に失敗しました", file=sys.stderr)
-	sys.exit(1)
+    print("fork() failed", file=sys.stderr)
+    sys.exit(1)
 
 if pid == 0:
-	data *= 2
-	sys.exit(0)
+    data *= 2
+    sys.exit(0)
 
 os.wait()
-print("子プロセス終了後のデータの値: {}".format(data))
+print("Data value after the child process exits: {}".format(data))

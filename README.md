@@ -1,10 +1,10 @@
 # linux-in-practice-2nd
 
-「Linuxのしくみ 増補改訂版」の実験コードです
+Experimental code for *Linux no Shikumi: Expanded and Revised Edition*.
 
-# 実験プログラム実行環境の作成
+# Setting Up the Experiment Environment
 
-お手元のUbuntu 20.04環境で本書の実験プログラムを実行する際は、以下のコマンドを実行して必要パッケージのインストールおよびユーザ設定をしてください。
+To run the experimental programs from the book on Ubuntu 20.04, run the following commands to install the required packages and configure your user account.
 
 ```console
 $ sudo apt update && sudo apt install binutils build-essential golang sysstat python3-matplotlib python3-pil fonts-takao fio qemu-kvm virt-manager libvirt-clients virtinst jq docker.io containerd libvirt-daemon-system

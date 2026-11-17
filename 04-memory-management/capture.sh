@@ -1,29 +1,29 @@
 #!/bin/bash
 
 <<COMMENT
-demand-paging.pyプロセスについて1秒間に1回メモリに関する情報を出力します。
-各行の先頭には情報を採取した時刻を表示します。その後に続くフィールドの意味は以下の通りです。
-   第1フィールド: 獲得済メモリ領域のサイズ
-   第2フィールド: 獲得済物理メモリのサイズ
-   第3フィールド: メジャーフォールトの数
-   第4フィールド: マイナーフォールトの数
+Prints memory information for the demand-paging.py process once per second.
+Each line begins with the time at which the information was collected. The remaining fields mean:
+   Field 1: Size of the allocated memory region
+   Field 2: Size of allocated physical memory
+   Field 3: Number of major faults
+   Field 4: Number of minor faults
 COMMENT
 
 PID=$(pgrep -f "demand-paging\.py")
 
 if [ -z "${PID}" ]; then
-    echo "demand-paging.pyプロセスが存在しませんので$0より先に起動してください。" >&2
-    exit 1
+	echo "The demand-paging.py process does not exist; start it before running $0." >&2
+	exit 1
 fi
 
 while true; do
-    DATE=$(date | tr -d '\n')
-    # -hはヘッダを出力しないためのオプションです。
-    INFO=$(ps -h -o vsz,rss,maj_flt,min_flt -p ${PID})
-    if [ $? -ne 0 ]; then
-        echo "$DATE: demand-paging.pyプロセスは終了しました。" >&2
-        exit 1
-    fi
-    echo "${DATE}: ${INFO}"
-    sleep 1
+	DATE=$(date | tr -d '\n')
+	# -h suppresses the header.
+	INFO=$(ps -h -o vsz,rss,maj_flt,min_flt -p ${PID})
+	if [ $? -ne 0 ]; then
+		echo "$DATE: the demand-paging.py process has exited." >&2
+		exit 1
+	fi
+	echo "${DATE}: ${INFO}"
+	sleep 1
 done

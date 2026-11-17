@@ -4,6 +4,6 @@ import os
 
 ret = os.fork()
 if ret == 0:
-	os.execve("/bin/echo", ["echo", "fork()とexecve()によって生成されました"], {})
+    os.execve("/bin/echo", ["echo", "Created by fork() and execve()"], {})
 elif ret > 0:
-	print("echoコマンドを生成しました")
+    print("Created the echo command")

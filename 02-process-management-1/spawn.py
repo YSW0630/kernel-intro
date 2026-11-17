@@ -2,5 +2,5 @@
 
 import os
 
-os.posix_spawn("/bin/echo", ["echo", "echo", "posix_spawn()によって生成されました"], {})
-print("echoコマンドを生成しました")
+os.posix_spawn("/bin/echo", ["echo", "echo", "Created by posix_spawn()"], {})
+print("Created the echo command")

@@ -1,5 +1,5 @@
 #!/bin/bash
 
 false &
-wait $! # falseプロセスの終了を待ち合わせる。falseコマンドのPIDは`$!`変数から得られる
-echo "falseコマンドが終了しました: $?" # wait後にfalseプロセスの戻り値は`$?`変数から得られる。
+wait $!                         # Wait for the false process to exit. Its PID is available in `$!`.
+echo "false command exited: $?" # After wait, the false process exit status is available in `$?`.

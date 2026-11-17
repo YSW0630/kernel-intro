@@ -2,15 +2,15 @@
 
 import subprocess
 
-# 適当な量のデータを作成してメモリを獲得します。
-# メモリ容量が少ないシステムではプログラムがメモリ不足で失敗する可能性があります。
-# その場合はsizeの値を小さくして再実行してください。
+# Create enough data to allocate memory.
+# On systems with little memory, the program may fail because it runs out of memory.
+# If that happens, reduce size and run it again.
 size = 10000000
 
-print("メモリ獲得前のシステム全体のメモリ使用量を表示します。")
+print("Displaying system-wide memory usage before allocating memory.")
 subprocess.run("free")
 
-array = [0]*size
+array = [0] * size
 
-print("メモリ獲得後のシステム全体のメモリ空き容量を表示します。")
+print("Displaying system-wide free memory after allocating memory.")
 subprocess.run("free")

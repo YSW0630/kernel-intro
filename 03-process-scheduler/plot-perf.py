@@ -3,12 +3,16 @@
 import sys
 import plot_sched
 
+
 def usage():
-    print("""使い方: {} <最大プロセス数>
-    * cpuperfプログラムの実行結果を保存した"perf.data"ファイルをもとに性能情報を示すグラフを作る。
-    * "avg-tat.jpg"ファイルに平均ターンアラウンドタイムのグラフを保存する。
-    * "throughput.jpg"ファイルにスループットのグラフを保存する。""".format(progname, file=sys.stderr))
+    print(
+        """Usage: {} <maximum number of processes>
+    * Create performance graphs from the "perf.data" file containing cpuperf program results.
+    * Save a graph of average turnaround time to "avg-tat.jpg".
+    * Save a throughput graph to "throughput.jpg".""".format(progname, file=sys.stderr)
+    )
     sys.exit(1)
+
 
 progname = sys.argv[0]
 

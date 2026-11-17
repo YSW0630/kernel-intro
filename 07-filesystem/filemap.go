@@ -11,39 +11,39 @@ import (
 
 func main() {
 	pid := os.Getpid()
-	fmt.Println("*** testfileのメモリマップ前のプロセスの仮想アドレス空間 ***")
+	fmt.Println("*** Process virtual address space before memory-mapping testfile ***")
 	command := exec.Command("cat", "/proc/"+strconv.Itoa(pid)+"/maps")
 	command.Stdout = os.Stdout
 	err := command.Run()
 	if err != nil {
-		log.Fatal("catの実行に失敗しました")
+		log.Fatal("failed to execute cat")
 	}
 
 	file, err := os.OpenFile("testfile", os.O_RDWR, 0)
 	if err != nil {
-		log.Fatal("testfileを開けませんでした")
+		log.Fatal("failed to open testfile")
 	}
 	defer file.Close()
 
-	// mmap()システムコールの呼び出しによって5バイトのメモリ領域を獲得
+	// Allocate a 5-byte memory region by calling the mmap() system call.
 	data, err := syscall.Mmap(int(file.Fd()), 0, 5, syscall.PROT_READ|syscall.PROT_WRITE, syscall.MAP_SHARED)
 	if err != nil {
-		log.Fatal("mmap()に失敗しました")
+		log.Fatal("mmap() failed")
 	}
 
 	fmt.Println("")
-	fmt.Printf("testfileをマップしたアドレス: %p\n", &data[0])
+	fmt.Printf("Address where testfile is mapped: %p\n", &data[0])
 	fmt.Println("")
 
-	fmt.Println("*** testfileのメモリマップ後のプロセスの仮想アドレス空間 ***")
+	fmt.Println("*** Process virtual address space after memory-mapping testfile ***")
 	command = exec.Command("cat", "/proc/"+strconv.Itoa(pid)+"/maps")
 	command.Stdout = os.Stdout
 	err = command.Run()
 	if err != nil {
-		log.Fatal("catの実行に失敗しました")
+		log.Fatal("failed to execute cat")
 	}
 
-	// マップしたファイルの中身を書き換える
+	// Modify the contents of the mapped file.
 	replaceBytes := []byte("HELLO")
 	for i, _ := range data {
 		data[i] = replaceBytes[i]

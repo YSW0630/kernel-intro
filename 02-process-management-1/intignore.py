@@ -2,9 +2,10 @@
 
 import signal
 
-# SIGINTシグナルを無視するように設定。第1引数にはハンドラを設定するシグナル(ここではsignal.SIGINT)を、
-# 第2引数にはシグナルハンドラ(ここではsignal.SIG_IGN)を指定する。
+# Configure SIGINT to be ignored. The first argument specifies the signal for
+# which to set a handler (signal.SIGINT here), and the second specifies the
+# signal handler (signal.SIG_IGN here).
 signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 while True:
-	pass
+    pass
